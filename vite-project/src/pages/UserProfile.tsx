@@ -50,6 +50,8 @@ const { data: user, isLoading, isError, error } = useGetUserById(userId);
     if (reason === 'clickaway') {
       return;
     }
+    console.log(event);
+
     setSnackbarOpen(false);
   };
 
