@@ -27,7 +27,6 @@ const UploadRecipePage = () => {
       setSnackbarMessage('Recipe created successfully!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      window.location.reload();
     },
     onError: (error) => {
       console.error('Error creating recipe:', error);

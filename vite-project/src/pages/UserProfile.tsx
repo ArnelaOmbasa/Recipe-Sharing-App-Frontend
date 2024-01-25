@@ -30,7 +30,6 @@ const { data: user, isLoading, isError, error } = useGetUserById(userId);
       setSnackbarMessage('User updated successfully');
       setSnackbarOpen(true);
       setIsEditing(false); // Close the form on success
-      window.location.reload();
     },
     onError: (error: Error) => {
       setSnackbarMessage(error.message || 'Failed to update user');

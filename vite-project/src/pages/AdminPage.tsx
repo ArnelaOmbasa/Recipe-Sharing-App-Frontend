@@ -68,7 +68,6 @@ window.location.reload();    },
       setSnackbarMessage('Comment deleted successfully');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      window.location.reload();
     },
     onError: (error) => {
       setSnackbarMessage(error.message || 'Error deleting comment');
