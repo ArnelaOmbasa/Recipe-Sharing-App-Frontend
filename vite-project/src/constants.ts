@@ -1,4 +1,4 @@
 
 
-export const BASE_URL = 'https://frontend-recipe-app.onrender.com/'
+export const BASE_URL = 'https://recipe-arnela.onrender.com'
 
