@@ -1,0 +1,62 @@
+
+.title {
+  margin-bottom: 20px;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.AppBar-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+}
+
+.root-content {
+  padding-top: 64px; 
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  }
+
+.AdminPage-root {
+  display: flex;
+  padding-top: 64px;
+}
+
+.MuiDrawer-paper {
+  margin-top: 64px; 
+  height: calc(100% - 64px); 
+}
+
+
+.page-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; 
+}
+
+
+
+.content, .root-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+
+.Tabs-root {
+  justify-content: space-between; 
+}
+
+.Tabs-flexContainer {
+  justify-content:
+flex-end; 
+}
