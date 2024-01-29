@@ -24,13 +24,12 @@ const getRecipes = async (): Promise<Recipe[]> => {
 }
 
 const createRecipe = async (recipeData: RecipeRequestDTO): Promise<Recipe> => {
-    return appAxios.post(`/recipes`, recipeData).then(
-      (response) => {
-        const data = response.data;
-        console.log(data);
-        return data;
-      });
-  };
+  return appAxios.post(`/recipes`, recipeData).then(
+    (response) => {
+      const data = response.data;
+      return data;
+    });
+};
 
 
   const getRecipesByAuthor = async (username: string): Promise<Recipe[]> => {

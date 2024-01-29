@@ -13,7 +13,10 @@ const useCreateRecipe = (options?: UseMutationOptions<Recipe, Error, RecipeReque
     (newRecipe: RecipeRequestDTO) => RecipeService.createRecipe(newRecipe),
     {
       ...options,
-      onSuccess: async () => {
+      onSuccess: async (data, variables, context) => {
+        options?.onSuccess?.(data, variables, context);
+
+        // Refetch the recipes
         await queryClient.refetchQueries('recipes');
       },
     }
