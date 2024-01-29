@@ -29,7 +29,13 @@ const RecipeDetailPage = () => {
   if (!recipe) {
     return <div>Recipe not found</div>;
   }
-
+ 
+  const handleCommentSuccess = () => {
+    // Refetch the recipe data including comments after a successful comment creation
+    // You can use any method to refetch the data (e.g., refetchQuery, etc.)
+    // Here, I'm using console.log to simulate the refetching action
+    console.log('Refetching recipe data...');
+  };
 
 
 
@@ -77,7 +83,7 @@ const RecipeDetailPage = () => {
             <CommentsList comments={recipe.comments} />
                     </Box>
             <Box sx={{ mt: 4 }}>
-              <NewCommentForm recipeId={recipeId!} />
+              <NewCommentForm recipeId={recipeId!} onCommentSuccess={handleCommentSuccess}/>
             </Box>
           </Card>
         </Grid>

@@ -7,7 +7,7 @@ import { ApiError } from '../../hooks/useCreateComment';
 
 type Props = {
   recipeId: string;
-  onCommentSuccess: () => void; // Add callback prop
+  onCommentSuccess?: () => void;
 };
 
 const NewCommentForm = ({ recipeId, onCommentSuccess }: Props) => {
@@ -21,9 +21,11 @@ const NewCommentForm = ({ recipeId, onCommentSuccess }: Props) => {
       { recipeId, comment: { text: commentText } },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(['comments', recipeId]);
           setCommentText('');
-          onCommentSuccess(); // Call the callback provided by RecipeDetailPage
+          // Call the provided callback, if any
+          onCommentSuccess && onCommentSuccess();
+          // Invalidate and refetch the current recipe data, including comments
+          queryClient.invalidateQueries(['recipe', recipeId]);
         },
         onError: (error) => {
           console.log(error);
