@@ -29,7 +29,7 @@ const { data: user, isLoading, isError, error } = useGetUserById(userId);
     onSuccess: () => {
       setSnackbarMessage('User updated successfully');
       setSnackbarOpen(true);
-      setIsEditing(false); // Close the form on success
+      setIsEditing(false); 
     },
     onError: (error: Error) => {
       setSnackbarMessage(error.message || 'Failed to update user');
@@ -42,7 +42,7 @@ const { data: user, isLoading, isError, error } = useGetUserById(userId);
   };
 
   const handleUpdateUser = async (updatedUser: User) => {
-    // Use the updated useUpdateUser hook here
+
     updateMutation.mutate({ userId, userData: updatedUser });
   };
 

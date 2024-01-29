@@ -18,10 +18,12 @@ const UploadRecipePage = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertSeverity>('success');
 
   const currentUserUsername = useSelector((state: RootState) => state.auth.username);
+  const queryClient = useQueryClient();
 
   const { mutate: createRecipe } = useCreateRecipe({
-    onSuccess: () => {
+    onSuccess: async () => {
       setModalOpen(false);
+      await queryClient.refetchQueries('recipes');
       setSnackbarMessage('Recipe created successfully!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
@@ -32,18 +34,12 @@ const UploadRecipePage = () => {
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
     },
-    onSettled: () => {
-      // Invalidate the recipes cache after the mutation is completed
-      queryClient.invalidateQueries('recipes');
-    },
   });
-
-  const queryClient = useQueryClient();
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
 
-  const handleUploadRecipe = (title: string, description: string, ingredients: string, imageURL: string) => {
+  const handleUploadRecipe = async (title: string, description: string, ingredients: string, imageURL: string) => {
     const recipeData: RecipeRequestDTO = {
       title,
       description,
@@ -52,7 +48,22 @@ const UploadRecipePage = () => {
       ownerId: currentUserUsername || '',
     };
 
-    createRecipe(recipeData);
+    try {
+      // Call the mutation and wait for it to complete
+      await createRecipe(recipeData);
+
+      // After the recipe is created, refetch the 'recipes' query
+      await queryClient.refetchQueries('recipes');
+
+      setSnackbarMessage('Recipe created successfully!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+    } catch (error) {
+      console.error('Error creating recipe:', error);
+      setSnackbarMessage('Error creating recipe');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
   };
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -60,7 +71,6 @@ const UploadRecipePage = () => {
     if (reason === 'clickaway') {
       return;
     }
-
     setSnackbarOpen(false);
   };
 

@@ -13,11 +13,8 @@ const useCreateRecipe = (options?: UseMutationOptions<Recipe, Error, RecipeReque
     (newRecipe: RecipeRequestDTO) => RecipeService.createRecipe(newRecipe),
     {
       ...options,
-      onSettled: () => {
-        // Invalidate the recipes cache
-        queryClient.invalidateQueries('recipes');
-        // Refetch the recipes query
-        queryClient.refetchQueries('recipes');
+      onSuccess: async () => {
+        await queryClient.refetchQueries('recipes');
       },
     }
   );
