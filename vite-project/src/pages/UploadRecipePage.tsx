@@ -6,7 +6,6 @@ import useCreateRecipe from '../hooks/useCreateRecipe';
 import { RecipeRequestDTO } from '../utils/types';
 import { RootState } from '../store';
 import { useSelector } from 'react-redux';
-import { useQueryClient } from 'react-query';
 
 
 type AlertSeverity = 'error' | 'warning' | 'info' | 'success';
@@ -18,16 +17,8 @@ const UploadRecipePage = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertSeverity>('success');
 
   const currentUserUsername = useSelector((state: RootState) => state.auth.username);
-  const queryClient = useQueryClient();
 
   const { mutate: createRecipe } = useCreateRecipe({
-    onSuccess: async () => {
-      setModalOpen(false);
-      await queryClient.refetchQueries('recipes');
-      setSnackbarMessage('Recipe created successfully!');
-      setSnackbarSeverity('success');
-      setSnackbarOpen(true);
-    },
     onError: (error) => {
       console.error('Error creating recipe:', error);
       setSnackbarMessage('Error creating recipe');
@@ -49,12 +40,8 @@ const UploadRecipePage = () => {
     };
 
     try {
-      // Call the mutation and wait for it to complete
       await createRecipe(recipeData);
-
-      // After the recipe is created, refetch the 'recipes' query
-      await queryClient.refetchQueries('recipes');
-
+      setModalOpen(false);
       setSnackbarMessage('Recipe created successfully!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
@@ -73,7 +60,6 @@ const UploadRecipePage = () => {
     }
     setSnackbarOpen(false);
   };
-
 
   return (
     <Box sx={{ padding: 2}}>

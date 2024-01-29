@@ -9,18 +9,17 @@ import { Recipe } from '../utils/types';
 const useCreateRecipe = (options?: UseMutationOptions<Recipe, Error, RecipeRequestDTO>) => {
   const queryClient = useQueryClient();
 
-  return useMutation(
+  const mutation = useMutation(
     (newRecipe: RecipeRequestDTO) => RecipeService.createRecipe(newRecipe),
-    {
-      ...options,
-      onSuccess: async (data, variables, context) => {
-        options?.onSuccess?.(data, variables, context);
-
-        // Refetch the recipes
-        await queryClient.refetchQueries('recipes');
-      },
-    }
+    options
   );
+
+  const createRecipe = async (newRecipe: RecipeRequestDTO) => {
+    await mutation.mutateAsync(newRecipe);
+    queryClient.refetchQueries('recipes');
+  };
+
+  return { ...mutation, mutate: createRecipe };
 };
 
 export default useCreateRecipe;
