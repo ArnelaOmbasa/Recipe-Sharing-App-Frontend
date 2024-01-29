@@ -1,17 +1,19 @@
+// NewCommentForm.tsx
 import React, { useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
-import useCreateComment from '../../hooks/useCreateComment'; 
+import useCreateComment from '../../hooks/useCreateComment';
 import { useQueryClient } from 'react-query';
 import { ApiError } from '../../hooks/useCreateComment';
 
 type Props = {
   recipeId: string;
+  onCommentSuccess: () => void; // Add callback prop
 };
 
-const NewCommentForm = ({ recipeId }: Props) => {
+const NewCommentForm = ({ recipeId, onCommentSuccess }: Props) => {
   const [commentText, setCommentText] = useState('');
-  const queryClient = useQueryClient(); 
-  const createComment = useCreateComment(); 
+  const queryClient = useQueryClient();
+  const createComment = useCreateComment(recipeId);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -19,10 +21,9 @@ const NewCommentForm = ({ recipeId }: Props) => {
       { recipeId, comment: { text: commentText } },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(['comments', recipeId]); 
-          setCommentText(''); 
-          window.location.reload();
-
+          queryClient.invalidateQueries(['comments', recipeId]);
+          setCommentText('');
+          onCommentSuccess(); // Call the callback provided by RecipeDetailPage
         },
         onError: (error) => {
           console.log(error);
