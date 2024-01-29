@@ -6,6 +6,7 @@ import useCreateRecipe from '../hooks/useCreateRecipe';
 import { RecipeRequestDTO } from '../utils/types';
 import { RootState } from '../store';
 import { useSelector } from 'react-redux';
+import { useQueryClient } from 'react-query';
 
 
 type AlertSeverity = 'error' | 'warning' | 'info' | 'success';
@@ -30,13 +31,19 @@ const UploadRecipePage = () => {
       setSnackbarMessage('Error creating recipe');
       setSnackbarSeverity('error');
       setSnackbarOpen(true);
-    }
+    },
+    onSettled: () => {
+      // Invalidate the recipes cache after the mutation is completed
+      queryClient.invalidateQueries('recipes');
+    },
   });
+
+  const queryClient = useQueryClient();
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
-  
-  const handleUploadRecipe = async (title: string, description: string, ingredients: string, imageURL: string) => {
+
+  const handleUploadRecipe = (title: string, description: string, ingredients: string, imageURL: string) => {
     const recipeData: RecipeRequestDTO = {
       title,
       description,
@@ -45,20 +52,18 @@ const UploadRecipePage = () => {
       ownerId: currentUserUsername || '',
     };
 
-    // Use the updated useCreateRecipe hook here
-    await createRecipe(recipeData);
+    createRecipe(recipeData);
   };
-  
-  
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    console.log(event);
     if (reason === 'clickaway') {
       return;
     }
-    console.log(event);
 
     setSnackbarOpen(false);
   };
+
 
   return (
     <Box sx={{ padding: 2}}>
