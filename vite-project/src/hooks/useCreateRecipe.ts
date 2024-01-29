@@ -1,25 +1,25 @@
 // useCreateRecipe.ts
 
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient, UseMutationOptions, MutationFunction } from 'react-query';
 import RecipeService from '../services/recipes';
-import { RecipeRequestDTO } from '../utils/types';
-import { UseMutationOptions } from 'react-query';
 import { Recipe } from '../utils/types';
+import { RecipeRequestDTO } from '../utils/types';
 
-const useCreateRecipe = (options?: UseMutationOptions<Recipe, Error, RecipeRequestDTO>) => {
+type CreateRecipeMutationFn = MutationFunction<Recipe, [RecipeRequestDTO]>;
+
+const useCreateRecipe = (options?: UseMutationOptions<Recipe, Error, RecipeRequestDTO, CreateRecipeMutationFn>) => {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(
+  return useMutation<Recipe, Error, RecipeRequestDTO, CreateRecipeMutationFn>(
     (newRecipe: RecipeRequestDTO) => RecipeService.createRecipe(newRecipe),
-    options
+    {
+      ...options,
+      onSettled: () => {
+        // Invalidate the recipes cache
+        queryClient.invalidateQueries('recipes');
+      },
+    }
   );
-
-  const createRecipe = async (newRecipe: RecipeRequestDTO) => {
-    await mutation.mutateAsync(newRecipe);
-    queryClient.refetchQueries('recipes');
-  };
-
-  return { ...mutation, mutate: createRecipe };
 };
 
 export default useCreateRecipe;
