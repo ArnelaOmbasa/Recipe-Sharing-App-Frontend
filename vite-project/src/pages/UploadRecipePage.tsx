@@ -6,11 +6,14 @@ import useCreateRecipe from '../hooks/useCreateRecipe';
 import { RecipeRequestDTO } from '../utils/types';
 import { RootState } from '../store';
 import { useSelector } from 'react-redux';
+import { useQueryClient } from 'react-query';
+
 
 
 type AlertSeverity = 'error' | 'warning' | 'info' | 'success';
 
 const UploadRecipePage = () => {
+  const queryClient = useQueryClient();
   const [modalOpen, setModalOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -35,7 +38,6 @@ const UploadRecipePage = () => {
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
-
   const handleUploadRecipe = async (title: string, description: string, ingredients: string, imageURL: string) => {
     const recipeData: RecipeRequestDTO = {
       title,
@@ -44,10 +46,15 @@ const UploadRecipePage = () => {
       imageURL,
       ownerId: currentUserUsername || '',
     };
-
+  
     try {
       await createRecipe(recipeData);
-      // No need to manually invalidate queries here; it's done in useCreateRecipe hook
+      // Manually refetch the 'recipes' query after creating a recipe
+      queryClient.invalidateQueries('recipes');
+      setModalOpen(false);
+      setSnackbarMessage('Recipe created successfully!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Error creating recipe:', error);
       setSnackbarMessage('Error creating recipe');
@@ -55,6 +62,7 @@ const UploadRecipePage = () => {
       setSnackbarOpen(true);
     }
   };
+  
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
     console.log(event);
