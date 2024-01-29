@@ -35,8 +35,8 @@ const UploadRecipePage = () => {
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
-
-  const handleUploadRecipe = (title: string, description: string, ingredients: string, imageURL: string) => {
+  
+  const handleUploadRecipe = async (title: string, description: string, ingredients: string, imageURL: string) => {
     const recipeData: RecipeRequestDTO = {
       title,
       description,
@@ -44,7 +44,9 @@ const UploadRecipePage = () => {
       imageURL,
       ownerId: currentUserUsername || '',
     };
-    createRecipe(recipeData);  // Pass the recipe data without the username
+
+    // Use the updated useCreateRecipe hook here
+    await createRecipe(recipeData);
   };
   
   
