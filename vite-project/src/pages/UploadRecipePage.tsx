@@ -3,7 +3,6 @@ import RecipeUploadForm from '../components/RecipeUploadForm';
 import UserRecipeList from '../components/UserRecipeList';
 import { Button, Box, Snackbar, Alert } from '@mui/material';
 import useCreateRecipe from '../hooks/useCreateRecipe';
-import { useQueryClient } from 'react-query';
 import { RecipeRequestDTO } from '../utils/types';
 import { RootState } from '../store';
 import { useSelector } from 'react-redux';
@@ -16,14 +15,12 @@ const UploadRecipePage = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertSeverity>('success');
-  const queryClient = useQueryClient();
 
   const currentUserUsername = useSelector((state: RootState) => state.auth.username);
 
   const { mutate: createRecipe } = useCreateRecipe({
     onSuccess: () => {
       setModalOpen(false);
-      queryClient.invalidateQueries(['recipes']);
       setSnackbarMessage('Recipe created successfully!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
@@ -48,7 +45,6 @@ const UploadRecipePage = () => {
       ownerId: currentUserUsername || '',
     };
     createRecipe(recipeData);
-    queryClient.invalidateQueries('recipes'); // Add this line
   };
   
 

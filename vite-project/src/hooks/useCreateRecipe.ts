@@ -1,3 +1,5 @@
+// useCreateRecipe.ts
+
 import { useMutation, useQueryClient } from 'react-query';
 import RecipeService from '../services/recipes';
 import { RecipeRequestDTO } from '../utils/types';
@@ -11,10 +13,11 @@ const useCreateRecipe = (options?: UseMutationOptions<Recipe, Error, RecipeReque
     (newRecipe: RecipeRequestDTO) => RecipeService.createRecipe(newRecipe),
     {
       ...options,
-      onSuccess: (data, variables, context) => {
-        options?.onSuccess?.(data, variables, context);
+      onSuccess: (data, variables,context) => {
         // Invalidate the recipes cache
         queryClient.invalidateQueries('recipes');
+
+        options?.onSuccess?.(data, variables,context);
       },
     }
   );
