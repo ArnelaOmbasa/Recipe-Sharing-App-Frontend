@@ -7,6 +7,8 @@ import { RecipeRequestDTO } from '../utils/types';
 import { RootState } from '../store';
 import { useSelector } from 'react-redux';
 import { useQueryClient } from 'react-query';
+import useGetRecipesByAuthor from '../hooks/useGetRecipesByAuthor';
+import { CircularProgress } from '@mui/material';
 
 
 
@@ -20,6 +22,8 @@ const UploadRecipePage = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertSeverity>('success');
 
   const currentUserUsername = useSelector((state: RootState) => state.auth.username);
+  const { data: recipes, isLoading: isLoadingRecipes, isError: isErrorRecipes, error: errorRecipes } = useGetRecipesByAuthor(currentUserUsername || '');
+
 
   const { mutate: createRecipe } = useCreateRecipe({
     onSuccess: () => {
@@ -38,6 +42,7 @@ const UploadRecipePage = () => {
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
+
   const handleUploadRecipe = async (title: string, description: string, ingredients: string, imageURL: string) => {
     const recipeData: RecipeRequestDTO = {
       title,
@@ -46,11 +51,11 @@ const UploadRecipePage = () => {
       imageURL,
       ownerId: currentUserUsername || '',
     };
-  
+
     try {
       await createRecipe(recipeData);
-      // Manually refetch the 'recipes' query after creating a recipe
-      queryClient.invalidateQueries('recipes');
+      // Manually refetch the user's recipes after creating a recipe
+      queryClient.invalidateQueries(['recipesByAuthor', currentUserUsername]);
       setModalOpen(false);
       setSnackbarMessage('Recipe created successfully!');
       setSnackbarSeverity('success');
@@ -62,6 +67,7 @@ const UploadRecipePage = () => {
       setSnackbarOpen(true);
     }
   };
+
   
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -80,7 +86,15 @@ const UploadRecipePage = () => {
       <RecipeUploadForm open={modalOpen} onClose={handleCloseModal} onUpload={handleUploadRecipe} />
       <Box sx={{ maxWidth: '100%', overflow: 'hidden' }}>
 
-  <UserRecipeList authorUsername={currentUserUsername ?? ''} />
+      {isLoadingRecipes ? (
+        <CircularProgress />
+      ) : isErrorRecipes ? (
+        <div>Error: {errorRecipes?.message}</div>
+      ) : !recipes || recipes.length === 0 ? (
+        <div>No recipes found for this author.</div>
+      ) : (
+        <UserRecipeList authorUsername={currentUserUsername || ''} />
+      )}
 </Box>
       <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
         <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
