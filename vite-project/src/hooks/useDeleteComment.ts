@@ -1,4 +1,4 @@
-import { useMutation, UseMutationOptions } from 'react-query';
+import { useMutation, UseMutationOptions, useQueryClient } from 'react-query';
 import CommentService from '../services/comments';
 
 interface DeleteCommentParams {
@@ -7,9 +7,16 @@ interface DeleteCommentParams {
 }
 
 const useDeleteComment = (options?: UseMutationOptions<void, Error, DeleteCommentParams>) => {
+  const queryClient = useQueryClient();
   return useMutation(
     ({ recipeId, commentText }) => CommentService.deleteComment(recipeId, commentText),
-    options
+    {
+      ...options,
+      onSuccess: () => {
+        // Invalidate the comments cache
+        queryClient.invalidateQueries('comments');
+      },
+    }
   );
 };
 

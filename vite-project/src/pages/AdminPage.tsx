@@ -33,7 +33,7 @@ function AdminPage() {
       setSnackbarMessage('User deleted successfully');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-      window.location.reload();
+    ;
     },
     onError: (error) => {
       setSnackbarMessage(error.message || 'Error deleting user');
@@ -51,7 +51,7 @@ function AdminPage() {
       setSnackbarMessage('Recipe deleted successfully');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-window.location.reload();    },
+    },
     onError: (error) => {
       setSnackbarMessage(error.message || 'Error deleting recipe');
       setSnackbarSeverity('error');

@@ -1,4 +1,4 @@
-import { useMutation, UseMutationOptions } from 'react-query';
+import { useMutation, UseMutationOptions, useQueryClient } from 'react-query';
 import UserService from '../services/users';
 import { User } from '../utils/types';
 
@@ -11,9 +11,15 @@ export interface ApiError {
 }  
 
 const useUpdateUser = (options?: UseMutationOptions<User, Error, UpdateUserParams>) => {
+  const queryClient = useQueryClient();
   return useMutation<User, Error, UpdateUserParams>(
     ({ userId, userData }) => UserService.updateUser(userId, userData),
-    options
+    {
+      ...options,
+      onSuccess: () => {
+        queryClient.invalidateQueries('users');
+      },
+    }
   );
 };
 
