@@ -44,8 +44,10 @@ const UploadRecipePage = () => {
       imageURL,
       ownerId: currentUserUsername || '',
     };
-    createRecipe(recipeData);
+    createRecipe(recipeData);  // Pass the recipe data without the username
   };
+  
+  
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
