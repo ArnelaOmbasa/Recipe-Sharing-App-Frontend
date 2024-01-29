@@ -48,7 +48,9 @@ const UploadRecipePage = () => {
       ownerId: currentUserUsername || '',
     };
     createRecipe(recipeData);
+    queryClient.invalidateQueries('recipes'); // Add this line
   };
+  
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
