@@ -6,21 +6,29 @@ type UpdateUserParams = {
   userId: string;
   userData: User;
 };
-export interface ApiError {
-    message: string;
-}  
 
+export interface ApiError {
+  message: string;
+}
 const useUpdateUser = (options?: UseMutationOptions<User, Error, UpdateUserParams>) => {
   const queryClient = useQueryClient();
+
   return useMutation<User, Error, UpdateUserParams>(
-    ({ userId, userData }) => UserService.updateUser(userId, userData),
+    async ({ userId, userData }) => {
+      const updatedUser = await UserService.updateUser(userId, userData);
+      return updatedUser;
+    },
     {
       ...options,
-      onSuccess: () => {
-        queryClient.invalidateQueries('users');
+      onSuccess: (data, variables, context) => {
+        options?.onSuccess?.(data, variables, context);
+        
+        // Invalidate the user query to refetch the updated data
+        queryClient.invalidateQueries(['user', variables.userId]);
       },
     }
   );
 };
+
 
 export default useUpdateUser;

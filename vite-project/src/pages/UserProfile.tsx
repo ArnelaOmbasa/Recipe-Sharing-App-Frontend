@@ -42,6 +42,7 @@ const { data: user, isLoading, isError, error } = useGetUserById(userId);
   };
 
   const handleUpdateUser = async (updatedUser: User) => {
+    // Use the updated useUpdateUser hook here
     updateMutation.mutate({ userId, userData: updatedUser });
   };
 

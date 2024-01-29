@@ -28,7 +28,6 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ user, onUpdate, onClose }) 
     onUpdate(updatePayload);
     onClose();
   };
-
   return (
     <Container maxWidth="sm" sx={{ padding: '20px', marginTop: '20px' }}>
       <form onSubmit={handleSubmit}>
