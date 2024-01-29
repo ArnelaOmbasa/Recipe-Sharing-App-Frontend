@@ -19,6 +19,12 @@ const UploadRecipePage = () => {
   const currentUserUsername = useSelector((state: RootState) => state.auth.username);
 
   const { mutate: createRecipe } = useCreateRecipe({
+    onSuccess: () => {
+      setModalOpen(false);
+      setSnackbarMessage('Recipe created successfully!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+    },
     onError: (error) => {
       console.error('Error creating recipe:', error);
       setSnackbarMessage('Error creating recipe');
@@ -41,10 +47,7 @@ const UploadRecipePage = () => {
 
     try {
       await createRecipe(recipeData);
-      setModalOpen(false);
-      setSnackbarMessage('Recipe created successfully!');
-      setSnackbarSeverity('success');
-      setSnackbarOpen(true);
+      // No need to manually invalidate queries here; it's done in useCreateRecipe hook
     } catch (error) {
       console.error('Error creating recipe:', error);
       setSnackbarMessage('Error creating recipe');
