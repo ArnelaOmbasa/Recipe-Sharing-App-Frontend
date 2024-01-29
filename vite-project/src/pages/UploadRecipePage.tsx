@@ -46,7 +46,6 @@ const UploadRecipePage = () => {
     };
     createRecipe(recipeData);
   };
-  
 
   const handleCloseSnackbar = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {

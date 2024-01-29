@@ -13,11 +13,9 @@ const useCreateRecipe = (options?: UseMutationOptions<Recipe, Error, RecipeReque
     (newRecipe: RecipeRequestDTO) => RecipeService.createRecipe(newRecipe),
     {
       ...options,
-      onSuccess: (data, variables,context) => {
+      onSettled: () => {
         // Invalidate the recipes cache
         queryClient.invalidateQueries('recipes');
-
-        options?.onSuccess?.(data, variables,context);
       },
     }
   );
