@@ -2,9 +2,7 @@ import { Box, Grid, InputAdornment, Pagination, TextField } from '@mui/material'
 import RecipeCard from "../../components/RecipeCard";
 import useGetAllRecipes from "../../hooks/useGetAllRecipes"; 
 import { useState } from 'react';
-//import useGetRecipesByTitle from '../../hooks/useGetRecipeByTitle';
-
-//I want to use my get by recipe hook for handling the search query write me that code
+import useGetRecipesByTitle from "../../hooks/useGetRecipeByTitle";
 
 
 
@@ -16,10 +14,17 @@ const RecipeCardList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
- // const { data: recipesByTitle, isLoading: isLoadingRecipes, isError: isErrorRecipes, error: errorRecipes } = useGetRecipesByTitle(searchQuery);
+
+  useGetRecipesByTitle(searchQuery);
 
 
 
+
+
+
+
+
+  
 
   const filteredRecipes = recipes?.filter((recipe) => {
     return (
@@ -29,14 +34,16 @@ const RecipeCardList = () => {
 
 
 
-    const handleSearchChange = (event: any) => {
+  
+  const handleSearchChange = (event: any) => {
 
       setSearchQuery(event.target.value);
       setCurrentPage(1);
 
 
 
-    };
+      };
+
 
 
 
@@ -64,6 +71,10 @@ const RecipeCardList = () => {
 
   return (
     <Grid container spacing={2}>
+
+
+
+
 
 
         {/* search */}
@@ -95,6 +106,7 @@ const RecipeCardList = () => {
             <Pagination count={pageCount} page={currentPage} onChange={handlePageChange} />
           </Box>
         )}
+
     </Grid>
   );
 };
