@@ -1,9 +1,58 @@
-import { Grid } from '@mui/material';
+import { Box, Grid, InputAdornment, Pagination, TextField } from '@mui/material';
 import RecipeCard from "../../components/RecipeCard";
 import useGetAllRecipes from "../../hooks/useGetAllRecipes"; 
+import { useState } from 'react';
+//import useGetRecipesByTitle from '../../hooks/useGetRecipeByTitle';
+
+//I want to use my get by recipe hook for handling the search query write me that code
+
+
 
 const RecipeCardList = () => {
+
   const { data: recipes, isLoading, error } = useGetAllRecipes();
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
+
+ // const { data: recipesByTitle, isLoading: isLoadingRecipes, isError: isErrorRecipes, error: errorRecipes } = useGetRecipesByTitle(searchQuery);
+
+
+
+
+  const filteredRecipes = recipes?.filter((recipe) => {
+    return (
+      recipe.title.toLowerCase().includes(searchQuery.toLowerCase())  
+      );
+    });
+
+
+
+    const handleSearchChange = (event: any) => {
+
+      setSearchQuery(event.target.value);
+      setCurrentPage(1);
+
+
+
+    };
+
+
+
+
+    const pageCount = Math.ceil((filteredRecipes?.length ?? 0) / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedRecipes= filteredRecipes?.slice(startIndex, startIndex + itemsPerPage);
+  
+
+    const handlePageChange = (event: any, value: number) => {
+      console.log(event);
+      console.log(value);
+      setCurrentPage(value);
+    };
+
+ 
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -15,11 +64,37 @@ const RecipeCardList = () => {
 
   return (
     <Grid container spacing={2}>
-      {recipes && recipes.map((recipe, i) => (
+
+
+        {/* search */}
+        <TextField
+            placeholder="Search exercises"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            variant="outlined"
+            size="small"
+            sx={{ backgroundColor: 'white' }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          
+      {recipes && paginatedRecipes?.map((recipe, i) => (
         <Grid item key={i} xs={12} sm={6} md={4} lg={3}>
           <RecipeCard recipe={recipe} />
         </Grid>
       ))}
+
+       {/* pagination */}
+       {pageCount > 1 && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', m: 3 }}>
+            <Pagination count={pageCount} page={currentPage} onChange={handlePageChange} />
+          </Box>
+        )}
     </Grid>
   );
 };

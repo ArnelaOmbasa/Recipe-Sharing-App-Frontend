@@ -38,6 +38,12 @@ const createRecipe = async (recipeData: RecipeRequestDTO): Promise<Recipe> => {
     );
   };
 
+  const getRecipesByTitle = async (title: string): Promise<Recipe[]> => {
+    return appAxios.get(`/recipes/${title}`).then(
+      (response) => response.data
+    );
+  };
+
   const deleteRecipe = async (recipeId: string): Promise<void> => {
     return appAxios.delete(`/recipes/${recipeId}`).then(res => res.data);
   };
@@ -47,7 +53,8 @@ const createRecipe = async (recipeData: RecipeRequestDTO): Promise<Recipe> => {
     getRecipeById,
     createRecipe,
     getRecipesByAuthor,
-    deleteRecipe
+    deleteRecipe,
+    getRecipesByTitle
 };
 
 export default RecipeService;
