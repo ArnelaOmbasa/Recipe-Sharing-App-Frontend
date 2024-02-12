@@ -48,13 +48,35 @@ const createRecipe = async (recipeData: RecipeRequestDTO): Promise<Recipe> => {
     return appAxios.delete(`/recipes/${recipeId}`).then(res => res.data);
   };
 
+  
+
+// pagination and search
+const getRecipesPaginated = async (name: string, page: number, size: number): Promise<Recipe[]> => {
+    let data: Recipe[] = [];
+
+    try {
+        return appAxios.get(`/recipe/paginate?title=${name}&page=${page}&size=${size}`).then(
+            (response) => {
+                data = response.data;
+                console.log(data);
+
+                return data;
+            });
+    } catch(error: any) {
+        console.log(error.message);
+    }
+
+    return data;
+}
+
  const RecipeService = {
     getRecipes,
     getRecipeById,
     createRecipe,
     getRecipesByAuthor,
     deleteRecipe,
-    getRecipesByTitle
+    getRecipesByTitle,
+    getRecipesPaginated
 };
 
 export default RecipeService;
