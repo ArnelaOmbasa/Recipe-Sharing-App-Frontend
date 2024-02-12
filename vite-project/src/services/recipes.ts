@@ -55,7 +55,7 @@ const getRecipesPaginated = async (name: string, page: number, size: number): Pr
     let data: Recipe[] = [];
 
     try {
-        return appAxios.get(`/recipe/paginate?title=${name}&page=${page}&size=${size}`).then(
+        return appAxios.get(`/recipes/paginate?title=${name}&page=${page}&size=${size}`).then(
             (response) => {
                 data = response.data;
                 console.log(data);
