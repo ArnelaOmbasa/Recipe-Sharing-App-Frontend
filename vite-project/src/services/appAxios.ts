@@ -4,7 +4,7 @@ import { BASE_URL } from '../constants';
 
 const appAxios = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 10000000,
 });
 
 // This is an interceptor that adds the auth token to every request
