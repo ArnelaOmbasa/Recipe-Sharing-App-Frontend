@@ -53,7 +53,7 @@ const RecipeCardList = () => {
       <Grid container spacing={2}>
 
         
-      <div style={{ marginTop: '10px' }}>Current Page: {currentPage + 1}</div>
+      {/*<div style={{ marginTop: '10px' }}>Current Page: {currentPage + 1}</div>*/ }
 
         {recipes && recipes.map((recipe, i) => (
           <Grid item key={i} xs={12} sm={6} md={4} lg={3}>
