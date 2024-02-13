@@ -51,11 +51,17 @@ const RecipeCardList = () => {
       />
       <Button onClick={handleSearchSubmit} variant="contained">Search</Button>
       <Grid container spacing={2}>
+
+         {/* Display current page */}
+      <div style={{ marginTop: '10px' }}>Current Page: {currentPage + 1}</div>
+      
         {recipes && recipes.map((recipe, i) => (
           <Grid item key={i} xs={12} sm={6} md={4} lg={3}>
             <RecipeCard recipe={recipe} />
           </Grid>
         ))}
+
+        
       </Grid>
     </>
   );
