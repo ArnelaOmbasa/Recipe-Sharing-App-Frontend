@@ -1,4 +1,4 @@
-import { Box, Button, Grid, InputAdornment, Menu, MenuItem, Pagination, TextField } from '@mui/material';
+import { Box, Grid, InputAdornment, Pagination, TextField } from '@mui/material';
 import RecipeCard from "../../components/RecipeCard";
 import useGetAllRecipes from "../../hooks/useGetAllRecipes"; 
 import { useState } from 'react';
@@ -110,15 +110,6 @@ const RecipeCardList = () => {
           </Box>
         )}
 
-
-
-        <Button variant="contained" >Categories</Button>
-
-        <Menu open={true}>
-          <MenuItem>Slatko</MenuItem>
-          <MenuItem>Slano</MenuItem>
-          <MenuItem>Traditional</MenuItem>
-        </Menu>
 
           
 
