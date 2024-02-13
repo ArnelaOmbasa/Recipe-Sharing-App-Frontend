@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Grid, Select, MenuItem, InputLabel, FormControl, TextField, Button } from '@mui/material';
 import RecipeCard from "../../components/RecipeCard";
 import useRecipesPaginated from "../../hooks/useRecipesPaginated";
@@ -18,7 +18,7 @@ const RecipeCardList = () => {
     setSearchTerm(event.target.value);
   };
 
-  
+
   const handleSearchSubmit = () => {
     setCurrentPage(0);
   };
